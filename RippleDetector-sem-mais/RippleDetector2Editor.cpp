@@ -28,9 +28,6 @@ RippleDetector2Editor::RippleDetector2Editor(GenericProcessor* parentNode, bool 
     addAndMakeVisible(plusButton);                                                                            //Cria caixinha com +
 
 //-------------------------------------------------------------
-    lastLowCutString = " ";
-    lastHighCutString = " ";
-    
     highCutLabel = new Label("high cut label", "High cut:");
     highCutLabel->setBounds(10,65,80,20);
     highCutLabel->setFont(Font("Small Text", 12, Font::plain));
@@ -42,26 +39,6 @@ RippleDetector2Editor::RippleDetector2Editor(GenericProcessor* parentNode, bool 
     lowCutLabel->setFont(Font("Small Text", 12, Font::plain));
     lowCutLabel->setColour(Label::textColourId, Colours::darkgrey);
     addAndMakeVisible(lowCutLabel);
-    
-    lowCutValue = new Label("low cut value", lastLowCutString);
-    lowCutValue->setBounds(15,42,60,18);
-    lowCutValue->setFont(Font("Default", 15, Font::plain));
-    lowCutValue->setColour(Label::textColourId, Colours::white);
-    lowCutValue->setColour(Label::backgroundColourId, Colours::grey);
-    lowCutValue->setEditable(true);
-    lowCutValue->addListener(this);
-    lowCutValue->setTooltip("Set the low cut for the selected channels");
-    addAndMakeVisible(lowCutValue);
-
-    highCutValue = new Label("high cut label", lastHighCutString);
-    highCutValue->setBounds(15,82,60,18);
-    highCutValue->setFont(Font("Default", 15, Font::plain));
-    highCutValue->setColour(Label::textColourId, Colours::white);
-    highCutValue->setColour(Label::backgroundColourId, Colours::grey);
-    highCutValue->setEditable(true);
-    highCutValue->addListener(this);
-    highCutValue->setTooltip("Set the high cut for the selected channels");
-    addAndMakeVisible(highCutValue);
 //-------------------------------------------------------------
     backgroundColours.add(Colours::green);
     backgroundColours.add(Colours::red);
