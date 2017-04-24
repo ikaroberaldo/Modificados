@@ -30,14 +30,8 @@ private:
 
 //    ScopedPointer<ComboBox> detectorSelector;
 //-------------------------------------------------------------
-    String lastHighCutString;
-    String lastLowCutString;
-    
     ScopedPointer<Label> highCutLabel;
     ScopedPointer<Label> lowCutLabel;
-    
-    ScopedPointer<Label> highCutValue;
-    ScopedPointer<Label> lowCutValue;
 //-------------------------------------------------------------
     ScopedPointer<UtilityButton> plusButton;
 
