@@ -13,7 +13,7 @@ RippleDetector2::RippleDetector2()
       defaultHighCut(2.00f)
 {
 
-    setProcessorType (PROCESSOR_TYPE_FILTER);                                                                 //Deixa o módulo azul claro na borda
+    //setProcessorType (PROCESSOR_TYPE_FILTER);                                                                 //Deixa o módulo azul claro na borda
 }
 
 RippleDetector2::~RippleDetector2()
