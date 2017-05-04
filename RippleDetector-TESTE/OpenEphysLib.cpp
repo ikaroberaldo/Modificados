@@ -24,7 +24,8 @@ extern "C" EXPORT int getPluginInfo(int index, Plugin::PluginInfo* info)
 	switch (index)
 	{
 	case 0:
-		info->type = Plugin::PLUGIN_TYPE_PROCESSOR;
+		info->type = Plugin::ProcessorPlugin;
+		//info->type = Plugin::PLUGIN_TYPE_PROCESSOR;
 		info->processor.name = "2Ripple Detector"; //Processor name shown in the GUI
 		info->processor.type = Plugin::FilterProcessor;
 		info->processor.creator = &(Plugin::createProcessor<RippleDetector2>);
