@@ -29,15 +29,15 @@ RippleDetector2Editor::RippleDetector2Editor(GenericProcessor* parentNode, bool 
     lastLowCutString = " ";
     lastHighCutString = " ";
     
-    highCutLabel = new Label("high cut label", "Amplitude:");
+    highCutLabel = new Label("high cut label", "Amplitude (sd):");
     highCutLabel->setBounds(10,75,80,20);
-    highCutLabel->setFont(Font("Small Text", 12, Font::plain));
+    highCutLabel->setFont(Font("Small Text", 10, Font::plain));
     highCutLabel->setColour(Label::textColourId, Colours::darkgrey);
     addAndMakeVisible(highCutLabel);
     
-    lowCutLabel = new Label("low cut label", "Tempo (ms):");
+    lowCutLabel = new Label("low cut label", "Time (ms):");
     lowCutLabel->setBounds(10,35,80,20);
-    lowCutLabel->setFont(Font("Small Text", 12, Font::plain));
+    lowCutLabel->setFont(Font("Small Text", 10, Font::plain));
     lowCutLabel->setColour(Label::textColourId, Colours::darkgrey);
     addAndMakeVisible(lowCutLabel);
 
