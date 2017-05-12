@@ -313,7 +313,7 @@ void RippleInterface::updateChannels(int numChannels)
 
     for (int i = 0; i < numChannels; i++)
     {
-        inputSelector->addItem(String(i+1), i++);
+        inputSelector->addItem(String(i+1), i+2);
 
     }
 
