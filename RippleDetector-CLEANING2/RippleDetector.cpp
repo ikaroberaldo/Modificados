@@ -100,15 +100,15 @@ void RippleDetector2::setParameter(int parameterIndex, float newValue)
 
         if (parameterIndex == 0)
         {
-            lowCuts.set (currentChannel,newValue);
+            TimeS.set (currentChannel,newValue);
         }
         else if (parameterIndex == 1)
         {
-            highCuts.set (currentChannel,newValue);
+            AmplitudeS.set (currentChannel,newValue);
         }
 
-        setFilterParameters (lowCuts[currentChannel],
-                             highCuts[currentChannel],
+        setFilterParameters (TimeS[currentChannel],
+                             AmplitudeS[currentChannel],
                              currentChannel);
 
         editor->updateParameterButtons (parameterIndex);
@@ -123,35 +123,35 @@ void RippleDetector2::updateSettings()
     
     if (numInputs < 1024)
     {
-        Array<double> oldlowCuts;
-        Array<double> oldhighCuts;
-        oldlowCuts = lowCuts;
-        oldhighCuts = highCuts;
+        Array<double> OldTime;
+        Array<double> OldAmplitude;
+        OldTime = TimeS;
+        OldAmplitude = AmplitudeS;
 
-        lowCuts.clear();
-        highCuts.clear();
+        TimeS.clear();
+        AmplitudeS.clear();
 
         for (int n = 0; n < getNumInputs(); ++n)
         {
-            float newLowCut  = 0.f;
-            float newHighCut = 0.f;
+            float NewTime  = 0.f;
+            float NewAmplitude = 0.f;
 
-            if (oldlowCuts.size() > n)
+            if (OldTime.size() > n)
             {
-                newLowCut  = oldlowCuts[n];
-                newHighCut = oldhighCuts[n];
+                NewTime  = OldTime[n];
+                NewAmplitude = OldAmplitude[n];
             }
             else
             {
-                newLowCut  = defaultTime;
-                newHighCut = defaultAmplitude;
+                NewTime  = defaultTime;
+                NewAmplitude = defaultAmplitude;
             }
 
 
-            lowCuts.add  (newLowCut);
-            highCuts.add (newHighCut);
+            TimeS.add  (NewTime);
+            AmplitudeS.add (NewAmplitude);
 
-            setFilterParameters (newLowCut, newHighCut, n);
+            setFilterParameters (NewTime, NewAmplitude, n);
         }
     }
 
@@ -190,16 +190,16 @@ void RippleDetector2::handleEvent(int eventType, MidiMessage& event, int sampleN
 
 }
 
-double RippleDetector2::getLowCutValueForChannel (int chan) const
+double RippleDetector2::getTimeValueForChannel (int chan) const
 {
 
-    return lowCuts[chan];
+    return TimeS[chan];
 }
 
-double RippleDetector2::getHighCutValueForChannel (int chan) const
+double RippleDetector2::getAmplitudeValueForChannel (int chan) const
 {
 
-    return highCuts[chan];
+    return AmplitudeS[chan];
 }
 
 void RippleDetector2::process(AudioSampleBuffer& buffer,
@@ -220,7 +220,7 @@ void RippleDetector2::process(AudioSampleBuffer& buffer,
         double ThresholdTime = 0.020;/*<- THIS IS THE TIME THRESHOLD*/ //Divide it for 1000 when it comes from the user input, for now
 
         ThresholdTime = TimeT/1000;
-        ThresholdAmplitude = amplitude;
+        ThresholdAmplitude = Amplitude;
         
             t = double(time.getHighResolutionTicks()) / double(time.getHighResolutionTicksPerSecond());//Starting to count time for the script here
             double arrSized = round(getNumSamples(module.inputChan)/4);//the following 3 lines are to create an array of specific size for saving the RMS from buffer
@@ -317,11 +317,11 @@ void RippleDetector2::process(AudioSampleBuffer& buffer,
 
 }
 
-void RippleDetector2::setFilterParameters (double lowCut, double highCut, int chan)
+void RippleDetector2::setFilterParameters (double a, double b, int chan)
 {
     if (channels.size() - 1 < chan)
         return;
-
-    TimeT = lowCut;
-    amplitude = highCut;
+        
+    TimeT = a;
+    Amplitude = b;
 }
