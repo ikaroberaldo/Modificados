@@ -10,11 +10,8 @@ RippleDetector2Editor::RippleDetector2Editor(GenericProcessor* parentNode, bool 
     : GenericEditor(parentNode, useDefaultParameterEditors), previousChannelCount(-1)
 
 {
-    desiredWidth = 400;
 
-    plusButton = new UtilityButton("+", titleFont);                                                           //Tirar quando
-    plusButton->addListener(this);                                                                            //puder tirar
-    plusButton->setRadius(3.0f);                                                                              //o setToggleState()
+    desiredWidth = 400;
 
     backgroundColours.add(Colours::green);
     backgroundColours.add(Colours::red);
@@ -22,42 +19,43 @@ RippleDetector2Editor::RippleDetector2Editor(GenericProcessor* parentNode, bool 
     backgroundColours.add(Colours::magenta);
     backgroundColours.add(Colours::blue);
 
-    plusButton->setToggleState(true, sendNotification);                                                       //Responsável pelo sumiço de tudo
+    addDetector();                                                                                            //Cria ondinha e caixinhas
 
-    lastLowCutString = " ";
-    lastHighCutString = " ";
+    lastTimeString = " ";
+    lastAmplitudeString = " ";
     
-    highCutLabel = new Label("high cut label", "Amplitude (sd):");
-    highCutLabel->setBounds(10,75,80,20);
-    highCutLabel->setFont(Font("Small Text", 10, Font::plain));
-    highCutLabel->setColour(Label::textColourId, Colours::darkgrey);
-    addAndMakeVisible(highCutLabel);
-    
-    lowCutLabel = new Label("low cut label", "Time (ms):");
-    lowCutLabel->setBounds(10,35,80,20);
-    lowCutLabel->setFont(Font("Small Text", 10, Font::plain));
-    lowCutLabel->setColour(Label::textColourId, Colours::darkgrey);
-    addAndMakeVisible(lowCutLabel);
+    AmplitudeLabel = new Label("Amplitude label", "Amplitude (sd):");
+    AmplitudeLabel->setBounds(10,75,80,20);
+    AmplitudeLabel->setFont(Font("Small Text", 10, Font::plain));
+    AmplitudeLabel->setColour(Label::textColourId, Colours::darkgrey);
+    addAndMakeVisible(AmplitudeLabel);
 
-    lowCutValue = new Label("low cut value", lastLowCutString);
-    lowCutValue->setBounds(15,52,60,18);
-    lowCutValue->setFont(Font("Default", 15, Font::plain));
-    lowCutValue->setColour(Label::textColourId, Colours::white);
-    lowCutValue->setColour(Label::backgroundColourId, Colours::grey);
-    lowCutValue->setEditable(true);
-    lowCutValue->addListener(this);
-    lowCutValue->setTooltip("Set the low cut for the selected channels");
-    addAndMakeVisible(lowCutValue);
+    TimeLabel = new Label("Time label", "Time (ms):");
+    TimeLabel->setBounds(10,35,80,20);
+    TimeLabel->setFont(Font("Small Text", 10, Font::plain));
+    TimeLabel->setColour(Label::textColourId, Colours::darkgrey);
+    addAndMakeVisible(TimeLabel);
 
-    highCutValue = new Label("high cut label", lastHighCutString);
-    highCutValue->setBounds(15,92,60,18);
-    highCutValue->setFont(Font("Default", 15, Font::plain));
-    highCutValue->setColour(Label::textColourId, Colours::white);
-    highCutValue->setColour(Label::backgroundColourId, Colours::grey);
-    highCutValue->setEditable(true);
-    highCutValue->addListener(this);
-    highCutValue->setTooltip("Set the high cut for the selected channels");
-    addAndMakeVisible(highCutValue);
+    TimeValue = new Label("Time value", lastTimeString);
+    TimeValue->setBounds(15,52,60,18);
+    TimeValue->setFont(Font("Default", 15, Font::plain));
+    TimeValue->setColour(Label::textColourId, Colours::white);
+    TimeValue->setColour(Label::backgroundColourId, Colours::grey);
+    TimeValue->setEditable(true);
+    TimeValue->addListener(this);
+    TimeValue->setTooltip("Set the time for the selected channels");
+    addAndMakeVisible(TimeValue);
+
+    AmplitudeValue = new Label("Amplitude label", lastAmplitudeString);
+    AmplitudeValue->setBounds(15,92,60,18);
+    AmplitudeValue->setFont(Font("Default", 15, Font::plain));
+    AmplitudeValue->setColour(Label::textColourId, Colours::white);
+    AmplitudeValue->setColour(Label::backgroundColourId, Colours::grey);
+    AmplitudeValue->setEditable(true);
+    AmplitudeValue->addListener(this);
+    AmplitudeValue->setTooltip("Set the amplitude for the selected channels");
+    addAndMakeVisible(AmplitudeValue);
+
 }
 
 RippleDetector2Editor::~RippleDetector2Editor()
@@ -100,12 +98,6 @@ void RippleDetector2Editor::comboBoxChanged(ComboBox* c)
 
 }
 
-void RippleDetector2Editor::buttonEvent(Button* button)
-{
-
-        addDetector();
-}
-
 void RippleDetector2Editor::addDetector()
 {
 
@@ -135,12 +127,12 @@ void RippleDetector2Editor::saveCustomParameters(XmlElement* xml)
         d->setAttribute("OUTPUT",interfaces[i]->getOutputChan());
     }
     
-    lastHighCutString = highCutValue->getText();
-    lastLowCutString = lowCutValue->getText();
+    lastAmplitudeString = AmplitudeValue->getText();
+    lastTimeString = TimeValue->getText();
 
     XmlElement* textLabelValues = xml->createNewChildElement("VALUES");
-    textLabelValues->setAttribute("HighCut",lastHighCutString);
-    textLabelValues->setAttribute("LowCut",lastLowCutString);
+    textLabelValues->setAttribute("Amplitude",lastAmplitudeString);
+    textLabelValues->setAttribute("Time",lastTimeString);
 }
 
 void RippleDetector2Editor::loadCustomParameters(XmlElement* xml)
@@ -167,8 +159,8 @@ void RippleDetector2Editor::loadCustomParameters(XmlElement* xml)
 
         else if (xmlNode->hasTagName("VALUES"))
         {
-            highCutValue->setText(xmlNode->getStringAttribute("HighCut"),dontSendNotification);
-            lowCutValue->setText(xmlNode->getStringAttribute("LowCut"),dontSendNotification);
+            AmplitudeValue->setText(xmlNode->getStringAttribute("Amplitude"),dontSendNotification);
+            TimeValue->setText(xmlNode->getStringAttribute("Time"),dontSendNotification);
         }
     }
 }
@@ -337,17 +329,19 @@ int RippleInterface::getGateChan()
     return gateSelector->getSelectedId()-2;
 } 
 
-void RippleDetector2Editor::setDefaults(double lowCut, double highCut)
+void RippleDetector2Editor::setDefaults(double Time, double Amplitude)
 {
-    lastHighCutString = String(roundFloatToInt(highCut));
-    lastLowCutString = String(roundFloatToInt(lowCut));
 
-    highCutValue->setText(lastHighCutString, dontSendNotification);
-    lowCutValue->setText(lastLowCutString, dontSendNotification);
+    lastAmplitudeString = String(roundFloatToInt(Amplitude));
+    lastTimeString = String(roundFloatToInt(Time));
+
+    AmplitudeValue->setText(lastAmplitudeString, dontSendNotification);
+    TimeValue->setText(lastTimeString, dontSendNotification);
 }
 
 void RippleDetector2Editor::labelTextChanged(Label* label)
 {
+
     RippleDetector2* sd = (RippleDetector2*) getProcessor();
 
     Value val = label->getTextValue();
@@ -357,15 +351,15 @@ void RippleDetector2Editor::labelTextChanged(Label* label)
     {
         CoreServices::sendStatusMessage("Value out of range.");
 
-        if (label == highCutValue)
+        if (label == AmplitudeValue)
         {
-            label->setText(lastHighCutString, dontSendNotification);
-            lastHighCutString = label->getText();
+            label->setText(lastAmplitudeString, dontSendNotification);
+            lastAmplitudeString = label->getText();
         }
         else
         {
-            label->setText(lastLowCutString, dontSendNotification);
-            lastLowCutString = label->getText();
+            label->setText(lastTimeString, dontSendNotification);
+            lastTimeString = label->getText();
         }
 
         return;
@@ -377,7 +371,7 @@ void RippleDetector2Editor::labelTextChanged(Label* label)
     for (int n = 0; n < chans.size(); n++)
     {
 
-        if (label == highCutValue)
+        if (label == AmplitudeValue)
         {
 
                 sd->setCurrentChannel(chans[n]);
@@ -385,7 +379,7 @@ void RippleDetector2Editor::labelTextChanged(Label* label)
                 sd->setParameter(1, requestedValue);
 
 
-            lastHighCutString = label->getText();
+            lastAmplitudeString = label->getText();
 
         }
         else
@@ -394,7 +388,7 @@ void RippleDetector2Editor::labelTextChanged(Label* label)
                 sd->setCurrentChannel(chans[n]);
                 sd->setParameter(0, requestedValue);
 
-            lastLowCutString = label->getText();
+            lastTimeString = label->getText();
 
         }
 
