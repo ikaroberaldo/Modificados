@@ -17,8 +17,8 @@ public:
     RippleDetector2();
     ~RippleDetector2();
 
-    double getLowCutValueForChannel  (int chan) const;
-    double getHighCutValueForChannel (int chan) const;
+    double getTimeValueForChannel  (int chan) const;
+    double getAmplitudeValueForChannel (int chan) const;
 
     void process(AudioSampleBuffer& buffer, MidiBuffer& midiMessages);
     void setParameter(int parameterIndex, float newValue);
@@ -71,10 +71,10 @@ private:
 
     void setFilterParameters (double, double, int);
 
-    Array<double> lowCuts;
-    Array<double> highCuts;
+    Array<double> TimeS;
+    Array<double> AmplitudeS;
     double TimeT;
-    double amplitude;
+    double Amplitude;
 
     double defaultTime;
     double defaultAmplitude;
