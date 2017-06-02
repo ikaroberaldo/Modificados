@@ -16,8 +16,6 @@ public:
     RippleDetector2Editor(GenericProcessor* parentNode, bool useDefaultParameterEditors);
     virtual ~RippleDetector2Editor();
 
-    void buttonEvent(Button* button);                                                                         //Tirando o argumento some tudo tbm
-
     void comboBoxChanged(ComboBox* c);
 
     void updateSettings();
@@ -27,11 +25,9 @@ public:
     
     void labelTextChanged(Label* label);
 
-    void setDefaults(double lowCut, double highCut);
+    void setDefaults(double Time, double Amplitude);
 
 private:
-
-    ScopedPointer<UtilityButton> plusButton;
 
     void addDetector();
 
@@ -41,14 +37,14 @@ private:
 
     Array<Colour> backgroundColours;
     
-    String lastHighCutString;
-    String lastLowCutString;
+    String lastAmplitudeString;
+    String lastTimeString;
 
-    ScopedPointer<Label> highCutLabel;
-    ScopedPointer<Label> lowCutLabel;
+    ScopedPointer<Label> AmplitudeLabel;
+    ScopedPointer<Label> TimeLabel;
 
-    ScopedPointer<Label> highCutValue;
-    ScopedPointer<Label> lowCutValue;
+    ScopedPointer<Label> AmplitudeValue;
+    ScopedPointer<Label> TimeValue;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RippleDetector2Editor);
 
@@ -63,7 +59,7 @@ public:
     ~RippleInterface();
 
     void comboBoxChanged(ComboBox*);
-    void buttonClicked(Button*);                                                                              //Não tirar ainda
+    void buttonClicked(Button*);                                                                              //Tirar junto com o Listener
 
     void updateChannels(int);
 
